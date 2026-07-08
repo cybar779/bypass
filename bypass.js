@@ -18,7 +18,7 @@
 
   // ─── Key Manual (Bypass License) ─────────────────────────────────────────────
   const VALID_KEYS = [
-    "kyyy aje", // Tetap dipertahankan biar ga crash kalau ada cache lama
+    "Super Kyyy", // Tetap dipertahankan biar ga crash kalau ada cache lama
   ];
 
   const FALLBACK_MUSIC_URL = "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/music.mp3";
@@ -110,7 +110,7 @@
     creditLink.id        = "vanz-floating-credit";
     creditLink.className = "vanz-clickable-credit";
     creditLink.innerText = "Super Kyyy";
-    creditLink.href      = "https://t.me/psteamadm_official";
+    creditLink.href      = "https://t.me/apoyxz";
     creditLink.target    = "_blank";
     document.body.appendChild(creditLink);
 
@@ -129,7 +129,7 @@
 
       <h3 style="margin:0 0 6px 0;color:#00ffcc;font-size:20px;letter-spacing:1.5px;
                  font-weight:800;text-shadow:0 0 12px rgba(0,255,204,0.5);text-transform:uppercase;">
-        ${titleName} Nihh
+        ${titleName} Official
       </h3>
       <p style="margin:0 0 20px 0;color:#64748b;font-size:11px;letter-spacing:2px;font-weight:600;">
         ENTER LICENSE KEY
