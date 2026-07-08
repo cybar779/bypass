@@ -109,7 +109,7 @@
     const creditLink     = document.createElement("a");
     creditLink.id        = "vanz-floating-credit";
     creditLink.className = "vanz-clickable-credit";
-    creditLink.innerText = "PSTeamAdm Official";
+    creditLink.innerText = "Super Kyyy";
     creditLink.href      = "https://t.me/psteamadm_official";
     creditLink.target    = "_blank";
     document.body.appendChild(creditLink);
@@ -129,7 +129,7 @@
 
       <h3 style="margin:0 0 6px 0;color:#00ffcc;font-size:20px;letter-spacing:1.5px;
                  font-weight:800;text-shadow:0 0 12px rgba(0,255,204,0.5);text-transform:uppercase;">
-        ${titleName} Official
+        ${titleName} Nihh
       </h3>
       <p style="margin:0 0 20px 0;color:#64748b;font-size:11px;letter-spacing:2px;font-weight:600;">
         ENTER LICENSE KEY
