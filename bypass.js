@@ -32,7 +32,7 @@
     document.getElementById("vanz-floating-credit")?.remove();
 
     const titleName    = "SUPER KYYY";
-    const telegramLink = "https://t.me/psteamadm_official"; // Mengikuti variabel asal t.me/ramachanel sesuai script asli
+    const telegramLink = "https://t.me/apoyxz"; // Mengikuti variabel asal t.me/ramachanel sesuai script asli
 
     // ── Inject CSS Animasi ────────────────────────────────────────────────────
     const styleEl = document.createElement("style");
