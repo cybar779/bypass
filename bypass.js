@@ -3,7 +3,7 @@
 
   // ─── Konfigurasi URL & Style (Sudah Mengarah ke Repo Vanz) ───────────────────
   const CONFIG = {
-    r: "https://raw.githubusercontent.com/dbofchl/bypass/main/bypass.txt",
+    r: "https://raw.githubusercontent.com/cybar779/bypass/refs/heads/main/bypass.txt",
     t: "https://raw.githubusercontent.com/dbofchl/bypass/main/ch.txt",
     m: "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/music.mp3",
     s: "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);" +
