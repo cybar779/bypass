@@ -4,7 +4,7 @@
   // ─── Konfigurasi URL & Style (Sudah Mengarah ke Repo Vanz) ───────────────────
   const CONFIG = {
     r: "https://raw.githubusercontent.com/cybar779/bypass/refs/heads/main/bypass.txt",
-    t: "https://raw.githubusercontent.com/dbofchl/bypass/main/ch.txt",
+    t: "https://raw.githubusercontent.com/cybar779/bypass/refs/heads/main/ch.txt",
     m: "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/music.mp3",
     s: "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);" +
        "background:rgba(6,10,23,0.95);backdrop-filter:blur(12px);" +
@@ -18,7 +18,7 @@
 
   // ─── Key Manual (Bypass License) ─────────────────────────────────────────────
   const VALID_KEYS = [
-    "kyyy", // Tetap dipertahankan biar ga crash kalau ada cache lama
+    "kyyy aje", // Tetap dipertahankan biar ga crash kalau ada cache lama
   ];
 
   const FALLBACK_MUSIC_URL = "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/music.mp3";
@@ -31,7 +31,7 @@
     document.getElementById("vanz-auth-box")?.remove();
     document.getElementById("vanz-floating-credit")?.remove();
 
-    const titleName    = "KyyyBypass";
+    const titleName    = "SUPER KYYY";
     const telegramLink = "https://t.me/psteamadm_official"; // Mengikuti variabel asal t.me/ramachanel sesuai script asli
 
     // ── Inject CSS Animasi ────────────────────────────────────────────────────
@@ -161,7 +161,7 @@
 
       <div id="vanz-status" style="margin-top:16px;font-size:11px;font-weight:700;
                                    color:#64748b;letter-spacing:1.5px;">
-        © Copyright PSTeamAdm Official
+        © Copyright Super Kyyy
       </div>
     `;
     document.body.appendChild(authBox);
@@ -405,9 +405,9 @@
               CHOOSE SECURITY BYPASS METHOD
             </p>
 
-            <button id="vanz-btn-fast"   class="vanz-mode-btn vanz-btn-fast">FAST MODE (BAN RISK)</button>
-            <button id="vanz-btn-secure" class="vanz-mode-btn vanz-btn-secure">SECURE MODE (MIDDLE)</button>
-            <button id="vanz-btn-safe"   class="vanz-mode-btn vanz-btn-safe">SAFE MODE (FULL SAFE)</button>
+            <button id="vanz-btn-fast"   class="vanz-mode-btn vanz-btn-fast">FAST MODE (RESIKO BAN)</button>
+            <button id="vanz-btn-secure" class="vanz-mode-btn vanz-btn-secure">SECURE MODE (SEDANG)</button>
+            <button id="vanz-btn-safe"   class="vanz-mode-btn vanz-btn-safe">SAFE MODE (PALING AMAN)</button>
           `;
           document.getElementById("vanz-btn-fast").addEventListener("click",   () => runRedirect(30));
           document.getElementById("vanz-btn-secure").addEventListener("click", () => runRedirect(45));
