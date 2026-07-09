@@ -1,421 +1,347 @@
 (function () {
   "use strict";
 
-  // ─── Konfigurasi URL & Style (Hanya warna Biru Neon) ──────────────────────
+  const _decode = (str) => atob(str);
+
+  //  Konfigurasi URL & Style 
   const CONFIG = {
-    r: "https://raw.githubusercontent.com/cybar779/bypass/refs/heads/main/bypass.txt",
-    t: "https://raw.githubusercontent.com/cybar779/bypass/refs/heads/main/ch.txt",
-    m: "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/music.mp3",
+    r: _decode("YUhSMGNITTZMeTl5WVhjdVoybDBhSFZpZFhObGNtTnZiblJsYm5RdVkyOXRMMk41WW1GeU56YzVMMko1Y0dGemN5OXlaV1p6TDJobFlXUnpMMjFoYVc0dllubHdZWE56TG5SNGRB"), 
+    t: _decode("YUhSMGNITTZMeTl5WVhjdVoybDBhSFZpZFhObGNtTnZiblJsYm5RdVkyOXRMMk41WW1GeU56YzVMMko1Y0dGemN5OXlaV1p6TDJobFlXUnpMMjFoYVc0dlkyZ3VkSGgw"),
+    m: _decode("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY39tL3Zhbnotd2Vic2l0ZS9WYW56QnlwYXNzL21haW4vbXVzaWMubXAz"),
     s: "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);" +
-       "background:rgba(6,10,23,0.95);backdrop-filter:blur(12px);" +
-       "-webkit-backdrop-filter:blur(12px);color:#fff;padding:30px 25px;" +
-       "border-radius:16px;z-index:2147483647;" +
-       'font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;' +
-       "text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.6);" +
-       "border:2px solid #00d4ff;width:300px;box-sizing:border-box;" +
-       "animation: vanz-lightning-glow 3s linear infinite;",
+       "background:rgba(6, 10, 22, 0.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);" +
+       "color:#fff;padding:40px 30px;border-radius:16px;z-index:2147483647;" +
+       'font-family:"Courier New", Courier, monospace;' +
+       "text-align:center;box-shadow:0 0 50px rgba(0, 255, 102, 0.15), inset 0 0 20px rgba(0, 255, 102, 0.05);" +
+       "border:1px solid rgba(0, 255, 102, 0.3);width:340px;box-sizing:border-box;transition: all 0.5s ease;",
   };
 
-  // ─── Key Manual (Bypass License) ─────────────────────────────────────────────
-  const VALID_KEYS = [
-    "Super Kyyy",
-  ];
-
-  const FALLBACK_MUSIC_URL = "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/music.mp3";
+  const VALID_KEYS = ["Super Kyyy"];
+  const FALLBACK_MUSIC_URL = _decode("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY39tL3Zhbnotd2Vic2l0ZS9WYW56QnlwYXNzL21haW4vbXVzaWMubXAz");
+  
   let audioPlayer = null;
+  let matrixState = "LOGIN"; // Status: LOGIN, OVERLOAD, BYPASS
 
-  // ─── Main IIFE ────────────────────────────────────────────────────────────────
+  //  Main Execution 
   (async function () {
-
-    // Hapus elemen lama jika ada
+    // Bersihkan sisa elemen lama jika ada
+    document.getElementById("matrix-bg-canvas")?.remove();
     document.getElementById("vanz-auth-box")?.remove();
     document.getElementById("vanz-floating-credit")?.remove();
 
     const titleName    = "SUPER KYYY";
-    const telegramLink = "https://t.me/apoyxz";
+    const telegramLink = _decode("YUhSMGNITTZMeTkwTG0xbEwyRndiM2w0ZWc9PQ=="); 
 
-    // ── Inject CSS Animasi (Biru Neon) ──────────────────────────────────────
+    //  Inject CSS Kustom untuk Efek Neon & Glitch 
     const styleEl = document.createElement("style");
     styleEl.textContent = `
-      @keyframes vanz-lightning-glow {
-        0%   { box-shadow: 0 0 5px #00d4ff, 0 0 10px #00d4ff, inset 0 0 5px rgba(0,212,255,0.2);  border-color: #00d4ff; }
-        25%  { box-shadow: 0 0 15px #00b8e6, 0 0 25px #00d4ff, inset 0 0 10px rgba(0,212,255,0.4); border-color: #00b8e6; }
-        30%  { box-shadow: 0 0 8px #00d4ff,  0 0 12px #00d4ff, inset 0 0 6px rgba(0,212,255,0.3);  border-color: #00d4ff; }
-        35%  { box-shadow: 0 0 25px #00ffff, 0 0 40px #00d4ff, inset 0 0 15px rgba(0,212,255,0.5); border-color: #00ffff; }
-        70%  { box-shadow: 0 0 15px #00b8e6, 0 0 25px #00d4ff, inset 0 0 10px rgba(0,212,255,0.4); border-color: #00b8e6; }
-        73%  { box-shadow: 0 0 5px #00d4ff,  0 0 10px #00d4ff, inset 0 0 5px rgba(0,212,255,0.2);  border-color: #00d4ff; }
-        100% { box-shadow: 0 0 5px #00d4ff,  0 0 10px #00d4ff, inset 0 0 5px rgba(0,212,255,0.2);  border-color: #00d4ff; }
+      @keyframes neon-pulse {
+        0%, 100% { border-color: rgba(0, 255, 102, 0.4); box-shadow: 0 0 10px rgba(0, 255, 102, 0.1); }
+        50% { border-color: rgba(0, 255, 102, 1); box-shadow: 0 0 20px rgba(0, 255, 102, 0.4); }
       }
-      @keyframes vanz-spin {
-        0%   { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+      @keyframes text-glitch {
+        0% { text-shadow: 0 0 8px #00ff66; }
+        95% { text-shadow: 0 0 8px #00ff66; }
+        96% { text-shadow: -2px 0 #ff0055, 2px 0 #00f0ff; }
+        98% { text-shadow: 2px 0 #ff0055, -2px 0 #00f0ff; }
+        100% { text-shadow: 0 0 8px #00ff66; }
       }
-      @keyframes vanz-fire-spin {
-        0%   { transform: translate(-50%, -50%) rotate(0deg); }
-        100% { transform: translate(-50%, -50%) rotate(360deg); }
-      }
-      @keyframes vanz-rainbow-glow {
-        0%   { color: #00d4ff; text-shadow: 0 0 6px #00d4ff; }
-        16%  { color: #00eeff; text-shadow: 0 0 6px #00eeff; }
-        33%  { color: #0088ff; text-shadow: 0 0 6px #0088ff; }
-        50%  { color: #0055ff; text-shadow: 0 0 6px #0055ff; }
-        66%  { color: #00aaff; text-shadow: 0 0 6px #00aaff; }
-        83%  { color: #0066ff; text-shadow: 0 0 6px #0066ff; }
-        100% { color: #00d4ff; text-shadow: 0 0 6px #00d4ff; }
-      }
-
-      .vanz-clickable-credit {
-        position: fixed;
-        bottom: 14px;
-        right: 20px;
-        font-size: 18px;
-        font-weight: bold;
-        font-family: 'Courier New', Courier, monospace;
-        letter-spacing: 1px;
-        z-index: 2147483647;
-        text-decoration: none;
-        cursor: pointer;
-        background: transparent;
-        border: none;
-        padding: 0;
-        margin: 0;
-        animation: vanz-rainbow-glow 3s linear infinite;
-      }
-
+      @keyframes spin-clockwise { 0% { transform: translate(-50%,-50%) rotate(0deg); } 100% { transform: translate(-50%,-50%) rotate(360deg); } }
+      @keyframes spin-counter { 0% { transform: translate(-50%,-50%) rotate(360deg); } 100% { transform: translate(-50%,-50%) rotate(0deg); } }
+      
+      .matrix-input-glow { animation: neon-pulse 3s infinite ease-in-out; }
+      .matrix-title-anim { animation: text-glitch 4s infinite linear; }
+      
       .vanz-mode-btn {
-        width: 100%;
-        border: 1px solid rgba(0,212,255,0.3);
-        padding: 12px;
-        border-radius: 8px;
-        font-weight: 700;
-        cursor: pointer;
-        font-size: 14px;
-        letter-spacing: 1.5px;
-        margin-bottom: 12px;
-        color: #fff;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
+        width: 100%; border: 1px solid #00ff66; padding: 12px; border-radius: 6px;
+        font-weight: 700; cursor: pointer; font-size: 12px; letter-spacing: 2px;
+        margin-bottom: 12px; color: #00ff66; background: rgba(0, 255, 102, 0.03);
+        transition: all 0.3s ease; text-transform: uppercase; font-family: inherit;
       }
-      .vanz-btn-fast   { background: linear-gradient(90deg, rgba(0,212,255,0.1), rgba(0,212,255,0.2)); border-color: #00d4ff; box-shadow: 0 0 8px rgba(0,212,255,0.2); }
-      .vanz-btn-fast:hover   { background: #00d4ff; color: #030712; box-shadow: 0 0 15px #00d4ff; }
-      .vanz-btn-secure { background: linear-gradient(90deg, rgba(0,136,255,0.1), rgba(0,136,255,0.2)); border-color: #0088ff; box-shadow: 0 0 8px rgba(0,136,255,0.2); }
-      .vanz-btn-secure:hover { background: #0088ff; color: #030712; box-shadow: 0 0 15px #0088ff; }
-      .vanz-btn-safe   { background: linear-gradient(90deg, rgba(50,50,200,0.1), rgba(50,50,200,0.2)); border-color: #3232c8; box-shadow: 0 0 8px rgba(50,50,200,0.2); }
-      .vanz-btn-safe:hover   { background: #3232c8; color: #030712; box-shadow: 0 0 15px #3232c8; }
+      .vanz-mode-btn:hover { background: #00ff66; color: #000; box-shadow: 0 0 20px #00ff66; transform: scale(1.02); }
     `;
     document.head.appendChild(styleEl);
 
-    // ── Floating Credit ───────────────────────────────────────────────────────
-    const creditLink     = document.createElement("a");
-    creditLink.id        = "vanz-floating-credit";
-    creditLink.className = "vanz-clickable-credit";
-    creditLink.innerText = "Super Kyyy";
-    creditLink.href      = "https://t.me/apoyxz";
-    creditLink.target    = "_blank";
+    //  INTERACTIVE MATRIX CANVAS BACKGROUND 
+    const canvas = document.createElement("canvas");
+    canvas.id = "matrix-bg-canvas";
+    canvas.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; z-index:2147483640; background:#02040a;";
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext("2d");
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const fontSize = 14;
+    const columns = Math.floor(width / fontSize);
+    const drops = Array(columns).fill(1);
+    
+    // Karakter gabungan biner & siber ala matriks asli
+    const matrixChars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+    function drawMatrix() {
+      // Menentukan ketebalan background trail berdasarkan state
+      if (matrixState === "LOGIN") {
+        ctx.fillStyle = "rgba(2, 4, 10, 0.05)";
+      } else {
+        // Efek distorsi trail saat terdeteksi bypass/overload
+        ctx.fillStyle = "rgba(4, 2, 8, 0.08)"; 
+      }
+      ctx.fillRect(0, 0, width, height);
+
+      // Skema warna dinamis berdasarkan state menu
+      if (matrixState === "LOGIN") {
+        ctx.fillStyle = "#00ff66"; // Hijau Klasik Netral
+      } else if (matrixState === "OVERLOAD") {
+        ctx.fillStyle = "#ff0055"; // Merah Peringatan Teroris Digital
+      } else {
+        ctx.fillStyle = "#00f0ff"; // Cyan Protokol Aktif
+      }
+      
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        // Kecepatan & sensitivitas jatuh diubah secara dramatis saat state berubah
+        const resetThreshold = matrixState === "LOGIN" ? 0.975 : 0.93; 
+        if (drops[i] * fontSize > height && Math.random() * 1 > resetThreshold) {
+          drops[i] = 0;
+        }
+        
+        // Percepat aliran jatuhnya kode jika sudah masuk mode bypass
+        drops[i] += matrixState === "LOGIN" ? 1 : 2;
+      }
+    }
+    let matrixInterval = setInterval(drawMatrix, 33);
+
+    //  Floating Credit Text 
+    const creditLink = document.createElement("a");
+    creditLink.id = "vanz-floating-credit";
+    creditLink.style.cssText = "position:fixed;bottom:15px;right:20px;font-size:12px;font-weight:bold;letter-spacing:2px;z-index:2147483647;text-decoration:none;color:#00ff66;text-shadow:0 0 5px #00ff66;";
+    creditLink.innerText = `// ${titleName.toUpperCase()}_`;
+    creditLink.href = telegramLink;
+    creditLink.target = "_blank";
     document.body.appendChild(creditLink);
 
-    // ── Buat Auth Box (Biru Neon) ──────────────────────────────────────────────
-    const authBox         = document.createElement("div");
-    authBox.id            = "vanz-auth-box";
+    //  Build Core Login Box 
+    const authBox = document.createElement("div");
+    authBox.id = "vanz-auth-box";
     authBox.style.cssText = CONFIG.s;
-    authBox.innerHTML     = `
+    authBox.innerHTML = `
       <button id="vanz-music-btn" style="
-        position:absolute;top:15px;right:15px;
-        background:rgba(255,255,255,0.05);border:1px solid rgba(0,212,255,0.3);
-        color:#ff4444;border-radius:50%;width:32px;height:32px;
-        cursor:pointer;font-size:14px;display:flex;align-items:center;
-        justify-content:center;box-shadow:0 0 8px rgba(0,0,0,0.3);
-        transition:all 0.3s ease;z-index:10;">🔇</button>
+        position:absolute;top:15px;right:15px;background:transparent;
+        border:1px solid rgba(0,255,102,0.3);color:#00ff66;border-radius:4px;
+        width:32px;height:24px;cursor:pointer;font-size:10px;font-family:inherit;">MUTE</button>
 
-      <h3 style="margin:0 0 6px 0;color:#00d4ff;font-size:20px;letter-spacing:1.5px;
-                 font-weight:800;text-shadow:0 0 12px rgba(0,212,255,0.5);text-transform:uppercase;">
-        ${titleName} Official
+      <h3 class="matrix-title-anim" style="margin:10px 0 2px 0;color:#00ff66;font-size:24px;letter-spacing:3px;font-weight:900;text-transform:uppercase;">
+        ${titleName}
       </h3>
-      <p style="margin:0 0 20px 0;color:#8892b0;font-size:11px;letter-spacing:2px;font-weight:600;">
-        ENTER LICENSE KEY
+      <p style="margin:0 0 30px 0;color:#475569;font-size:10px;letter-spacing:2px;">
+        MATRIX_INTERFACE_v4.0
       </p>
 
-      <input type="text" id="vanz-key-input" placeholder="ENTER KEY HERE" style="
-        width:100%;padding:12px;margin-bottom:16px;
-        border:1px solid rgba(0,212,255,0.4);border-radius:8px;
-        background:rgba(7,11,25,0.6);color:#fff;text-align:center;
-        box-sizing:border-box;font-size:13px;font-weight:600;
-        letter-spacing:1px;outline:none;transition:all 0.3s ease;
-        box-shadow:inset 0 2px 4px rgba(0,0,0,0.5);">
+      <input type="text" id="vanz-key-input" class="matrix-input-glow" placeholder="[ ENTER ACCESS KEY ]" style="
+        width:100%;padding:14px;margin-bottom:18px;border:1px solid rgba(0,255,102,0.3);
+        border-radius:6px;background:rgba(0,0,0,0.85);color:#00ff66;text-align:center;
+        box-sizing:border-box;font-size:13px;font-weight:600;font-family:inherit;
+        letter-spacing:2px;outline:none;transition:all 0.3s;">
 
       <button id="vanz-login-btn" style="
-        width:100%;background:#00d4ff;color:#030712;border:none;
-        padding:12px;border-radius:8px;font-weight:700;cursor:pointer;
-        font-size:14px;letter-spacing:0.5px;margin-bottom:12px;
-        box-shadow:0 4px 12px rgba(0,212,255,0.3);transition:all 0.2s ease;">
-        VERIFY KEY
+        width:100%;background:#00ff66;color:#000;border:none;padding:14px;
+        border-radius:6px;font-weight:900;cursor:pointer;font-size:12px;
+        letter-spacing:2px;margin-bottom:12px;font-family:inherit;
+        box-shadow:0 0 15px rgba(0,255,102,0.3);transition:all 0.2s ease;">
+        CONNECT_TO_HOST
       </button>
 
       <button id="vanz-telegram-btn" style="
-        width:100%;background:#229ED9;color:#fff;border:none;
-        padding:12px;border-radius:8px;font-weight:700;cursor:pointer;
-        font-size:14px;letter-spacing:0.5px;
-        box-shadow:0 4px 12px rgba(34,158,217,0.25);">
-        TELEGRAM
+        width:100%;background:transparent;color:#229ED9;border:1px solid #229ED9;
+        padding:12px;border-radius:6px;font-weight:700;cursor:pointer;
+        font-size:11px;letter-spacing:2px;font-family:inherit;transition:all 0.3s;">
+        TELEGRAM_CH
       </button>
 
-      <div id="vanz-status" style="margin-top:16px;font-size:11px;font-weight:700;
-                                   color:#8892b0;letter-spacing:1.5px;">
-        © Copyright Super Kyyy
+      <div id="vanz-status" style="margin-top:25px;font-size:10px;color:#475569;letter-spacing:1px;">
+        NODE_STATUS: LINK_IDLE
       </div>
     `;
     document.body.appendChild(authBox);
 
-    // ── Referensi Elemen ──────────────────────────────────────────────────────
     const musicBtn    = document.getElementById("vanz-music-btn");
     const keyInput    = document.getElementById("vanz-key-input");
     const loginBtn    = document.getElementById("vanz-login-btn");
     const telegramBtn = document.getElementById("vanz-telegram-btn");
     const statusEl    = document.getElementById("vanz-status");
 
-    // ── Responsif Mobile ──────────────────────────────────────────────────────
-    setTimeout(() => {
-      authBox.style.zIndex = "2147483647";
-      if (window.innerWidth < 600) {
-        authBox.style.width    = "90%";
-        authBox.style.maxWidth = "300px";
-      }
-    }, 10);
-
-    // ── Event: Tombol Musik ───────────────────────────────────────────────────
+    //  Handle BGM Audio 
     let musicLoading = false;
     musicBtn.addEventListener("click", async () => {
       if (musicLoading) return;
-
       if (!audioPlayer) {
-        musicLoading         = true;
-        musicBtn.textContent = "⏳";
-        let resolvedUrl      = FALLBACK_MUSIC_URL;
+        musicLoading = true;
+        musicBtn.textContent = "...";
+        let resolvedUrl = FALLBACK_MUSIC_URL;
         try {
-          const res      = await fetch(CONFIG.m + "?t=" + Date.now());
+          const res = await fetch(CONFIG.m + "?t=" + Date.now(), { credentials: "omit", mode: "cors" });
           const audioUrl = (await res.text()).trim();
-          if (audioUrl && audioUrl.startsWith("http")) {
-            resolvedUrl = audioUrl;
-          }
-        } catch (err) {
-          console.log("Failed to fetch music URL, using fallback:", err);
-        }
-        audioPlayer      = new Audio(resolvedUrl);
+          if (audioUrl && audioUrl.startsWith("http")) resolvedUrl = audioUrl;
+        } catch (err) { console.log(err); }
+        audioPlayer = new Audio(resolvedUrl);
         audioPlayer.loop = true;
-        musicLoading     = false;
+        musicLoading = false;
       }
-
       if (audioPlayer.paused) {
-        audioPlayer.play()
-          .then(() => {
-            musicBtn.textContent       = "🔊";
-            musicBtn.style.color       = "#00d4ff";
-            musicBtn.style.borderColor = "#00d4ff";
-            musicBtn.style.boxShadow   = "0 0 10px rgba(0,212,255,0.4)";
-          })
-          .catch(err => {
-            console.log("Playback failed:", err);
-            musicBtn.textContent = "🔇";
-          });
+        audioPlayer.play().then(() => {
+          musicBtn.textContent = "PLAY";
+          musicBtn.style.color = "#00ff66";
+          musicBtn.style.borderColor = "#00ff66";
+        }).catch(() => { musicBtn.textContent = "MUTE"; });
       } else {
         audioPlayer.pause();
-        musicBtn.textContent       = "🔇";
-        musicBtn.style.color       = "#ff4444";
-        musicBtn.style.borderColor = "rgba(0,212,255,0.3)";
-        musicBtn.style.boxShadow   = "0 0 8px rgba(0,0,0,0.3)";
+        musicBtn.textContent = "MUTE";
+        musicBtn.style.color = "#ff0055";
+        musicBtn.style.borderColor = "rgba(255,0,85,0.3)";
       }
     });
 
-    // ── Event: Fokus / Blur Input ─────────────────────────────────────────────
-    keyInput.addEventListener("focus", () => {
-      keyInput.style.border    = "1px solid #00d4ff";
-      keyInput.style.boxShadow = "0 0 10px rgba(0,212,255,0.25), inset 0 2px 4px rgba(0,0,0,0.5)";
-    });
-    keyInput.addEventListener("blur", () => {
-      keyInput.style.border    = "1px solid rgba(0,212,255,0.4)";
-      keyInput.style.boxShadow = "inset 0 2px 4px rgba(0,0,0,0.5)";
-    });
-
-    // ── Event: Tombol Telegram ────────────────────────────────────────────────
     telegramBtn.addEventListener("click", () => {
-      if (telegramLink && telegramLink.startsWith("http")) {
-        window.open(telegramLink, "_blank");
-      }
+      if (telegramLink?.startsWith("http")) window.open(telegramLink, "_blank");
     });
 
-    // ── Fungsi: Overlay Checking Update + Countdown Redirect ──────────────────
+    //  Fungsi Utama: Efek Saat Bypass Timer Berjalan 
     function runRedirect(countdownSeconds) {
+      // Ubah state matriks latar belakang menjadi bypass (Warna Cyan & Super Cepat)
+      matrixState = "BYPASS"; 
       authBox.remove();
 
-      const loadingOverlay = document.createElement("div");
-      loadingOverlay.style.cssText = `
-        position:fixed; top:0; left:0; width:100%; height:100%;
-        background:rgba(3,7,18,0.85); backdrop-filter:blur(8px);
-        -webkit-backdrop-filter:blur(8px); z-index:2147483647;
-        display:flex; align-items:center; justify-content:center;
-        font-family:system-ui,-apple-system,sans-serif;
-      `;
-      loadingOverlay.innerHTML = `
-        <div style="text-align:center; background:rgba(6,10,23,0.95);
-                    padding:35px 30px; border-radius:16px;
-                    border:1px solid #00d4ff; width:290px;
-                    animation: vanz-lightning-glow 3s linear infinite;">
-          <div style="width:45px; height:45px;
-                      border:4px solid rgba(0,212,255,0.1);
-                      border-top:4px solid #00d4ff; border-radius:50%;
-                      margin:0 auto 20px auto;
-                      animation:vanz-spin 0.8s linear infinite;
-                      box-shadow:0 0 15px rgba(0,212,255,0.2);"></div>
-          <p id="vanz-check-text" style="color:#00d4ff; font-size:15px;
-             font-weight:700; margin:0; letter-spacing:1.5px;
-             text-shadow:0 0 8px rgba(0,212,255,0.3);">CHECKING UPDATE...</p>
+      // Render HUD Kontainer Timer Baru Berbasis Tech-Ring Geometric
+      const DASH_TOTAL = 597;
+      const countdownOverlay = document.createElement("div");
+      countdownOverlay.id = "vanz-timer-overlay";
+      countdownOverlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;z-index:2147483645;display:flex;align-items:center;justify-content:center;font-family:inherit;";
+      countdownOverlay.innerHTML = `
+        <div style="position:relative; z-index:10; text-align:center;">
+          <div style="position:relative; width:260px; height:260px; margin:0 auto; display:flex; align-items:center; justify-content:center;">
+            
+            <div style="position:absolute; top:50%; left:50%; width:230px; height:230px; border-radius:50%;
+                        background:conic-gradient(transparent 0deg, #00f0ff 180deg, transparent 360deg);
+                        filter:blur(20px); opacity:0.4; animation:spin-clockwise 3s linear infinite;"></div>
+
+            <div style="position:absolute; top:50%; left:50%; width:215px; height:215px; border-radius:50%;
+                        border:2px dashed rgba(0, 240, 255, 0.3); animation:spin-counter 8s linear infinite;"></div>
+
+            <svg width="250" height="250" style="transform:rotate(-90deg); position:relative;">
+              <circle cx="125" cy="125" r="95" fill="rgba(3, 6, 15, 0.85)" stroke="rgba(0,240,255,0.05)" stroke-width="12"></circle>
+              <circle id="progress" cx="125" cy="125" r="95" fill="none" stroke="#00f0ff" stroke-width="8"
+                      stroke-dasharray="${DASH_TOTAL}" stroke-dashoffset="${DASH_TOTAL}" stroke-linecap="round"
+                      style="filter:drop-shadow(0 0 10px #00f0ff); transition:stroke-dashoffset 1s linear;"></circle>
+            </svg>
+
+            <div id="countdown-text" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+                        font-size:58px; font-weight:900; color:#fff; text-shadow:0 0 25px #00f0ff;">${countdownSeconds}</div>
+          </div>
+          <p id="bypass-hud-status" style="margin-top:35px; color:#00f0ff; font-size:12px; font-weight:bold; letter-spacing:4px;
+                     text-shadow:0 0 10px #00f0ff; text-transform:uppercase;">EXTRACTING_TOKEN_STREAM...</p>
         </div>
       `;
-      document.body.appendChild(loadingOverlay);
+      document.body.appendChild(countdownOverlay);
 
-      setTimeout(async () => {
-        let hasUpdate = false;
-        try {
-          const updateRes  = await fetch("https://rm.rama-modz.workers.dev/");
-          const updateText = await updateRes.text();
-          if (updateText.includes("GitHub Updated")) hasUpdate = true;
-        } catch { /* silent */ }
+      let remaining = countdownSeconds;
+      const progressCircle = document.getElementById("progress");
+      const countdownText  = document.getElementById("countdown-text");
+      const hudStatus      = document.getElementById("bypass-hud-status");
 
-        const checkText = document.getElementById("vanz-check-text");
-        checkText.innerHTML = hasUpdate
-          ? "<span style='color:#00d4ff;'>Link Updated Successfully! ✓</span>"
-          : "<span style='color:#ff4444; text-shadow:0 0 8px rgba(255,68,68,0.3);'>No Update Available!</span>";
+      const systemLogs = ["OVERRIDING_GATEWAY...", "INJECTING_PAYLOAD...", "BYPASS_SUCCESS_REDIRECTING..."];
 
-        setTimeout(async () => {
-          loadingOverlay.remove();
-          try {
-            const redirectRes = await fetch(CONFIG.r + "?t=" + Date.now());
-            const redirectUrl = (await redirectRes.text()).trim();
+      const timer = setInterval(async () => {
+        remaining--;
+        if (countdownText) countdownText.textContent = remaining;
+        if (progressCircle) progressCircle.style.strokeDashoffset = DASH_TOTAL * (remaining / countdownSeconds);
 
-            if (!redirectUrl.startsWith("http")) return;
+        // Ubah log teks sub-terminal secara berkala biar terkesan kompleks
+        if (hudStatus && remaining % 8 === 0 && remaining > 0) {
+          hudStatus.textContent = systemLogs[Math.floor(Math.random() * systemLogs.length)];
+        }
 
-            const DASH_TOTAL       = 597;
-            const countdownOverlay = document.createElement("div");
-            countdownOverlay.style.cssText = `
-              position:fixed; top:0; left:0; width:100%; height:100%;
-              background:rgba(3,7,18,0.05); backdrop-filter:blur(1px);
-              -webkit-backdrop-filter:blur(1px); z-index:2147483647;
-              display:flex; align-items:center; justify-content:center;
-              font-family:system-ui,-apple-system,sans-serif;
-            `;
-            countdownOverlay.innerHTML = `
-              <div style="text-align:center;">
-                <div style="position:relative; width:250px; height:250px;
-                            margin:0 auto; display:flex; align-items:center;
-                            justify-content:center;">
-
-                  <div style="position:absolute; top:50%; left:50%;
-                              width:214px; height:214px; border-radius:50%;
-                              background:conic-gradient(transparent 0deg,#0088ff 90deg,#00d4ff 180deg,#00eeff 270deg,transparent 360deg);
-                              filter:blur(14px); opacity:0.85;
-                              animation:vanz-fire-spin 1.5s linear infinite; z-index:1;"></div>
-
-                  <div style="position:absolute; top:50%; left:50%;
-                              width:206px; height:206px; border-radius:50%;
-                              background:conic-gradient(transparent 0deg,#0055ff 60deg,#00aaff 120deg,#00d4ff 240deg,transparent 360deg);
-                              filter:blur(6px); opacity:0.9;
-                              animation:vanz-fire-spin 1s linear infinite reverse; z-index:2;"></div>
-
-                  <svg width="240" height="240"
-                       style="transform:rotate(-90deg); position:relative; z-index:3;">
-                    <circle cx="120" cy="120" r="95"
-                            fill="rgba(6,10,23,0.65)"
-                            stroke="rgba(0,212,255,0.1)"
-                            stroke-width="14"></circle>
-                    <circle id="progress" cx="120" cy="120" r="95"
-                            fill="none" stroke="#00d4ff" stroke-width="14"
-                            stroke-dasharray="${DASH_TOTAL}"
-                            stroke-dashoffset="${DASH_TOTAL}"
-                            stroke-linecap="round"
-                            style="filter:drop-shadow(0 0 6px #00d4ff);
-                                   transition:stroke-dashoffset 1s linear;"></circle>
-                  </svg>
-
-                  <div id="countdown-text" style="
-                    position:absolute; top:50%; left:50%;
-                    transform:translate(-50%,-50%);
-                    font-size:54px; font-weight:900; color:#fff;
-                    text-shadow:0 0 20px #00d4ff, 0 0 30px rgba(0,212,255,0.3);
-                    z-index:4;">${countdownSeconds}</div>
-                </div>
-
-                <p style="margin-top:30px; color:#00d4ff; font-size:16px;
-                           font-weight:700; letter-spacing:3px;
-                           text-shadow:0 0 12px rgba(0,212,255,0.4);
-                           position:relative; z-index:4;">REDIRECTING...</p>
-              </div>
-            `;
-            document.body.appendChild(countdownOverlay);
-
-            let remaining        = countdownSeconds;
-            const progressCircle = countdownOverlay.querySelector("#progress");
-            const countdownText  = countdownOverlay.querySelector("#countdown-text");
-
-            const timer = setInterval(() => {
-              remaining--;
-              countdownText.textContent             = remaining;
-              progressCircle.style.strokeDashoffset = DASH_TOTAL * (remaining / countdownSeconds);
-
-              if (remaining <= 0) {
-                clearInterval(timer);
-                if (audioPlayer) {
-                  audioPlayer.pause();
-                  audioPlayer = null;
-                }
-                countdownOverlay.remove();
-                window.location.replace(redirectUrl);
-              }
-            }, 1000);
-
-          } catch {
-            alert("REDIRECT ERROR!");
+        if (remaining <= 0) {
+          clearInterval(timer);
+          clearInterval(matrixInterval);
+          if (hudStatus) hudStatus.textContent = "HANDSHAKE_ESTABLISHED!";
+          
+          if (audioPlayer) {
+            audioPlayer.pause();
+            audioPlayer = null;
           }
-        }, 1500);
-      }, 5000);
+
+          try {
+            const redirectRes = await fetch(CONFIG.r + "?t=" + Date.now(), { credentials: "omit" });
+            const redirectUrl = (await redirectRes.text()).trim();
+            
+            document.getElementById("matrix-bg-canvas")?.remove();
+            countdownOverlay.remove();
+
+            if (redirectUrl.startsWith("http")) {
+              window.location.replace(redirectUrl);
+            } else {
+              alert("CRITICAL_ERR: SECURE TARGET NOT FOUND");
+            }
+          } catch {
+            alert("NETWORK_TIMEOUT: REDIRECT FAILED");
+          }
+        }
+      }, 1000);
     }
 
-    // ── Event: Tombol Login (validasi key manual) ─────────────────────────────
+    //  Logika Validasi Key & Render Menu Pilihan Protokol 
     loginBtn.addEventListener("click", () => {
       const inputKey = keyInput.value.trim();
 
       if (!inputKey) {
-        statusEl.innerHTML = "<span style='color:#ff4444;'>PLEASE INPUT KEY!</span>";
+        statusEl.innerHTML = "<span style='color:#ff0055;'>ERR: ACCESS_KEY_EMPTY</span>";
         return;
       }
 
       const isValid = VALID_KEYS.some(k => k.toLowerCase() === inputKey.toLowerCase());
 
       if (isValid) {
-        statusEl.innerHTML        = "<span style='color:#00d4ff;'>KEY VALIDATED! ✓</span>";
-        loginBtn.disabled         = true;
-        telegramBtn.disabled      = true;
+        // Alihkan matriks ke mode Overload (Merah Malicious) untuk transisi dramatis
+        matrixState = "OVERLOAD";
+        statusEl.innerHTML = "<span style='color:#00ff66;'>KEY_VERIFIED // LOADING_MODULES</span>";
+        loginBtn.disabled = true;
+        keyInput.disabled = true;
 
         setTimeout(() => {
+          authBox.style.borderColor = "#ff0055";
+          authBox.style.boxShadow = "0 0 50px rgba(255, 0, 85, 0.2)";
+          
           authBox.innerHTML = `
-            <h3 style="margin:0 0 8px 0;color:#00d4ff;font-size:18px;letter-spacing:1px;
-                       font-weight:800;text-shadow:0 0 12px rgba(0,212,255,0.5);">
-             BYPASS MODE VIP
+            <h3 style="margin:5px 0 2px 0;color:#ff0055;font-size:20px;letter-spacing:2px;font-weight:900;text-shadow:0 0 10px #ff0055;">
+              SELECT_METHOD
             </h3>
-            <p style="margin:0 0 22px 0;color:#8892b0;font-size:10px;letter-spacing:1.5px;font-weight:600;">
-              CHOOSE SECURITY BYPASS METHOD
+            <p style="margin:0 0 25px 0;color:#475569;font-size:10px;letter-spacing:1px;">
+              SYSTEM_COMPROMISE_LEVEL
             </p>
-
-            <button id="vanz-btn-fast"   class="vanz-mode-btn vanz-btn-fast">FAST MODE (RESIKO BAN)</button>
-            <button id="vanz-btn-secure" class="vanz-mode-btn vanz-btn-secure">SECURE MODE (SEDANG)</button>
-            <button id="vanz-btn-safe"   class="vanz-mode-btn vanz-btn-safe">SAFE MODE (PALING AMAN)</button>
+            
+            <button id="vanz-btn-safe"   class="vanz-mode-btn" style="border-color:#00f0ff;color:#00f0ff;">BYPASS GETKEY)</button>
           `;
-          document.getElementById("vanz-btn-fast").addEventListener("click",   () => runRedirect(30));
-          document.getElementById("vanz-btn-secure").addEventListener("click", () => runRedirect(45));
-          document.getElementById("vanz-btn-safe").addEventListener("click",   () => runRedirect(60));
-        }, 800);
+          
+          document.getElementById("vanz-btn-fast")?.addEventListener("click",   () => runRedirect(30));
+          document.getElementById("vanz-btn-secure")?.addEventListener("click", () => runRedirect(45));
+          document.getElementById("vanz-btn-safe")?.addEventListener("click",   () => runRedirect(60));
+        }, 1000);
 
       } else {
-        statusEl.innerHTML = "<span style='color:#ff4444;'>INVALID LICENSE KEY!</span>";
+        statusEl.innerHTML = "<span style='color:#ff0055;'>ERR: BAD_ACCESS_KEY</span>";
+        // Efek getar/glitch singkat pada box jika salah key
+        authBox.style.transform = "translate(-50%, -50%) scale(1.03)";
+        setTimeout(() => authBox.style.transform = "translate(-50%, -50%) scale(1)", 150);
       }
     });
 
