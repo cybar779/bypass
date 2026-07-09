@@ -1,13 +1,13 @@
 (function () {
   "use strict";
 
-  // ─── Konfigurasi URL & Style (Tema Biru Neon) ──────────────────────────────
+  // ─── Konfigurasi URL & Style (Hanya warna Biru Neon) ──────────────────────
   const CONFIG = {
     r: "https://raw.githubusercontent.com/cybar779/bypass/refs/heads/main/bypass.txt",
     t: "https://raw.githubusercontent.com/cybar779/bypass/refs/heads/main/ch.txt",
     m: "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/music.mp3",
     s: "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);" +
-       "background:rgba(8,12,30,0.95);backdrop-filter:blur(12px);" +
+       "background:rgba(6,10,23,0.95);backdrop-filter:blur(12px);" +
        "-webkit-backdrop-filter:blur(12px);color:#fff;padding:30px 25px;" +
        "border-radius:16px;z-index:2147483647;" +
        'font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;' +
@@ -27,13 +27,14 @@
   // ─── Main IIFE ────────────────────────────────────────────────────────────────
   (async function () {
 
+    // Hapus elemen lama jika ada
     document.getElementById("vanz-auth-box")?.remove();
     document.getElementById("vanz-floating-credit")?.remove();
 
     const titleName    = "SUPER KYYY";
     const telegramLink = "https://t.me/apoyxz";
 
-    // ── Inject CSS Animasi (Biru Neon) ─────────────────────────────────────────
+    // ── Inject CSS Animasi (Biru Neon) ──────────────────────────────────────
     const styleEl = document.createElement("style");
     styleEl.textContent = `
       @keyframes vanz-lightning-glow {
@@ -104,7 +105,7 @@
     `;
     document.head.appendChild(styleEl);
 
-    // ── Floating Credit ─────────────────────────────────────────────────────────
+    // ── Floating Credit ───────────────────────────────────────────────────────
     const creditLink     = document.createElement("a");
     creditLink.id        = "vanz-floating-credit";
     creditLink.className = "vanz-clickable-credit";
@@ -113,7 +114,7 @@
     creditLink.target    = "_blank";
     document.body.appendChild(creditLink);
 
-    // ── Buat Auth Box (Tema Biru Neon) ─────────────────────────────────────────
+    // ── Buat Auth Box (Biru Neon) ──────────────────────────────────────────────
     const authBox         = document.createElement("div");
     authBox.id            = "vanz-auth-box";
     authBox.style.cssText = CONFIG.s;
@@ -255,7 +256,7 @@
         font-family:system-ui,-apple-system,sans-serif;
       `;
       loadingOverlay.innerHTML = `
-        <div style="text-align:center; background:rgba(8,12,30,0.95);
+        <div style="text-align:center; background:rgba(6,10,23,0.95);
                     padding:35px 30px; border-radius:16px;
                     border:1px solid #00d4ff; width:290px;
                     animation: vanz-lightning-glow 3s linear infinite;">
@@ -323,7 +324,7 @@
                   <svg width="240" height="240"
                        style="transform:rotate(-90deg); position:relative; z-index:3;">
                     <circle cx="120" cy="120" r="95"
-                            fill="rgba(8,12,30,0.65)"
+                            fill="rgba(6,10,23,0.65)"
                             stroke="rgba(0,212,255,0.1)"
                             stroke-width="14"></circle>
                     <circle id="progress" cx="120" cy="120" r="95"
