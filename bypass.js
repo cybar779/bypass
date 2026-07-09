@@ -161,7 +161,7 @@
 
       <div id="vanz-status" style="margin-top:16px;font-size:11px;font-weight:700;
                                    color:#64748b;letter-spacing:1.5px;">
-        © Copyright PSTeamAdm Official
+        © Copyright Super Kyyy Official
       </div>
     `;
     document.body.appendChild(authBox);
