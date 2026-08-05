@@ -18,7 +18,7 @@
 
   // ─── Key Manual (Bypass License) ─────────────────────────────────────────────
   const VALID_KEYS = [
-    "KyyyVip", // Tetap dipertahankan biar ga crash kalau ada cache lama
+    "Kyyy", // Tetap dipertahankan biar ga crash kalau ada cache lama
   ];
 
   const FALLBACK_MUSIC_URL = "https://raw.githubusercontent.com/vanz-website/VanzBypass/main/music.mp3";
@@ -31,7 +31,7 @@
     document.getElementById("vanz-auth-box")?.remove();
     document.getElementById("vanz-floating-credit")?.remove();
 
-    const titleName    = "SUPER KYYY";
+    const titleName    = "KYYY BYPASS";
     const telegramLink = "https://t.me/apoyxz"; // Mengikuti variabel asal t.me/ramachanel sesuai script asli
 
     // ── Inject CSS Animasi (Semua warna diubah ke Biru Neon) ──────────────────
@@ -109,8 +109,8 @@
     const creditLink     = document.createElement("a");
     creditLink.id        = "vanz-floating-credit";
     creditLink.className = "vanz-clickable-credit";
-    creditLink.innerText = "SUPER KYYY OFFICIAL";
-    creditLink.href      = "https://t.me/psteamadm_official";
+    creditLink.innerText = "KYYY OFFICIAL";
+    creditLink.href      = "https://t.me/fnskyyy";
     creditLink.target    = "_blank";
     document.body.appendChild(creditLink);
 
@@ -399,7 +399,7 @@
           authBox.innerHTML = `
             <h3 style="margin:0 0 8px 0;color:#00d4ff;font-size:18px;letter-spacing:1px;
                        font-weight:800;text-shadow:0 0 12px rgba(0,212,255,0.5);">
-             SUPER KYYY BYPASS
+            KYYY BYPASS
             </h3>
             <p style="margin:0 0 22px 0;color:#8892b0;font-size:10px;letter-spacing:1.5px;font-weight:600;">
               CHOOSE SECURITY BYPASS METHOD
